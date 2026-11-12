@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QuantumFlow — Multiverse Execution Visualizer</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;600;700&family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="quantum-container">
+    <!-- Header -->
+    <header class="quantum-header">
+      <div class="logo-group">
+        <div class="quantum-orb"></div>
+        <div>
+          <h1>QUANTUM<span class="accent">FLOW</span></h1>
+          <p class="subtitle">Speculative Multiverse Execution & Counterfactual Causality Engine</p>
+        </div>
+      </div>
+      <div class="connection-status">
+        <span class="pulse-dot"></span>
+        <span id="conn-status-text">COHERENT (SSE CONNECTED)</span>
+      </div>
+    </header>
+
+    <!-- Metrics Bar -->
+    <section class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-label">ACTIVE SUPERPOSITIONS</div>
+        <div class="metric-value text-cyan" id="metric-superposed">0</div>
+        <div class="metric-foot">Concurrent speculative branches</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">COLLAPSED REALITIES</div>
+        <div class="metric-value text-emerald" id="metric-collapsed">0</div>
+        <div class="metric-foot">Wavefunction observations committed</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">DECOHERENCES (PRUNED)</div>
+        <div class="metric-value text-rose" id="metric-decohered">0</div>
+        <div class="metric-foot">Invariant violations disqualified</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">ROOT REALITY FINGERPRINT</div>
+        <div class="metric-value font-mono text-violet" id="metric-fingerprint">000000000000</div>
+        <div class="metric-foot">Cryptographic state hash</div>
+      </div>
+    </section>
+
+    <!-- Main Workspace -->
+    <div class="main-layout">
+      <!-- Left: Multiverse Topology Canvas -->
+      <section class="panel canvas-panel">
+        <div class="panel-header">
+          <h2><span class="icon">☊</span> MULTIVERSE CAUSALITY TOPOLOGY</h2>
+          <div class="panel-actions">
+            <span class="legend-item"><span class="legend-badge badge-root"></span> Root</span>
+            <span class="legend-item"><span class="legend-badge badge-superposed"></span> Superposed</span>
+            <span class="legend-item"><span class="legend-badge badge-collapsed"></span> Collapsed</span>
+            <span class="legend-item"><span class="legend-badge badge-decohered"></span> Decohered</span>
+          </div>
+        </div>
+        <div class="canvas-wrapper">
+          <canvas id="topologyCanvas"></canvas>
+        </div>
+      </section>
+
+      <!-- Right Column: State & Event Log -->
+      <section class="side-column">
+        <!-- Canonical State Inspector -->
+        <div class="panel state-panel">
+          <div class="panel-header">
+            <h2><span class="icon">◈</span> CANONICAL ROOT STATE</h2>
+            <span class="badge" id="root-keys-count">0 keys</span>
+          </div>
+          <div class="state-content font-mono" id="state-inspector">
+            <div class="empty-state">Initializing root state...</div>
+          </div>
+        </div>
+
+        <!-- Live Causal Event Feed -->
+        <div class="panel log-panel">
+          <div class="panel-header">
+            <h2><span class="icon">⚡</span> CAUSALITY TELEMETRY STREAM</h2>
+            <span class="badge live-badge">LIVE</span>
+          </div>
+          <div class="event-feed font-mono" id="event-feed">
+            <!-- Event entries appended here -->
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Active Timelines Cards -->
+    <section class="panel timelines-panel">
+      <div class="panel-header">
+        <h2><span class="icon">⚯</span> RECENT SPECULATIVE REALITIES</h2>
+        <span class="subtext">Isolated Copy-on-Write branches</span>
+      </div>
+      <div class="timelines-grid" id="timelines-container">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
