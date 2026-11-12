@@ -1,33 +1,34 @@
-# QuantumFlow 🌌
+# SENKU // QuantumFlow ⚡🧪
 
-> **Speculative Multiverse Execution Runtime & Counterfactual Causality Engine**  
-> *Architected with 10+ years of Distributed Systems, Concurrency, and Low-Latency Systems Experience.*
+> **10 Billion Percent Resilient Multiverse Execution Runtime & Counterfactual Causality Engine**  
+> *Engineered by Senku Technologies & Senku Quantum Labs.*
 
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/)
+[![Brand](https://img.shields.io/badge/Brand-SENKU%20LABS-00ff9d.svg)]()
 [![Tests](https://img.shields.io/badge/tests-18%2F18%20passing-brightgreen.svg)]()
 [![Zero Dependencies](https://img.shields.io/badge/dependencies-0%20(pure%20standard%20library)-success.svg)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
 
-## 💡 The Paradigm Shift: Why QuantumFlow?
+## ⚡ The Scientific Breakthrough: Why SENKU QuantumFlow?
 
-For the past 70 years, software execution has followed a single, brittle, linear timeline:
+> *"There's nothing you can't do if you try. Science is all about steady, painstaking effort."* — **Senku Ishigami**
+
+For 70 years, modern software has followed a single, fragile, linear path:
 
 $$\text{State } S_0 \xrightarrow{\text{op}_1} S_1 \xrightarrow{\text{op}_2} S_2 \xrightarrow{\text{exception}} \text{CRASH / RETRY STORM}$$
 
 When things fail (flaky microservices, network partitions, race conditions, bad inputs), our industry patches over it with ad-hoc try/catch blocks, exponential backoffs, circuit breakers, and distributed rollbacks.
 
-**QuantumFlow flips this entire paradigm on its head.**
+**Senku QuantumFlow shatters this paradigm with scientific precision.**
 
-Inspired by quantum mechanics (superposition and wavefunction collapse) and transactional memory:
-
-> **Instead of executing sequentially down a single uncertain path, a program enters a state of Superposition: it spawns multiple isolated speculative realities concurrently. Each reality mutates state in an isolated Copy-on-Write memory scope. When an observation occurs, a Wavefunction Collapse Operator evaluates mathematical invariants and performance objectives, atomically committing the winning reality into the canonical universe while cleanly dissolving failed or non-optimal timelines.**
+> **Instead of executing sequentially down a single uncertain path, Senku QuantumFlow enters a state of Superposition: it branches into multiple isolated speculative universes concurrently. Each reality mutates state in an isolated Copy-on-Write memory scope. When an observation occurs, a Wavefunction Collapse Operator evaluates mathematical invariants and performance objectives, atomically committing the winning reality into the canonical universe while cleanly dissolving failed or non-optimal timelines.**
 
 ```
-                     ┌─── [Timeline A: Primary gRPC] ────── (Packet Loss) ──> [DECOHERED ✗]
+                     ┌─── [Timeline A: Primary RPC] ────── (Packet Loss) ──> [DECOHERED ✗]
                      │
-[Canonical Reality] ─┼─── [Timeline B: Hedged Replica] ──── (30ms, 200 OK) ──> [COLLAPSED ★] ──> [New Reality]
+[Canonical Reality] ─┼─── [Timeline B: Hedged Replica] ──── (30ms, 200 OK) ──> [COLLAPSED ★] ──> [Canonical Truth]
                      │
                      └─── [Timeline C: Edge Cache] ──────── (50ms, Stale) ──> [DISSOLVED ◌]
 ```
@@ -37,7 +38,7 @@ Inspired by quantum mechanics (superposition and wavefunction collapse) and tran
 ## 🏛️ Core Architectural Pillars
 
 ### 1. Hierarchical Copy-on-Write (CoW) Temporal Shadow Memory
-Every speculative timeline possesses an isolated `TemporalMemory` container. Reads traverse up the parent lineage without locking, while mutations and deletions are recorded in local delta registers. There is **zero lock contention** between competing universes.
+Every speculative timeline possesses an isolated `TemporalMemory` container. Reads traverse up the parent lineage without locking, while mutations and deletions are recorded in local delta registers with **zero lock contention**.
 
 ### 2. Quantum Decoherence & Invariant Guards
 Universes must respect inviolable physical and business invariants (e.g. non-negative financial balance, sub-100ms latency, cryptographic schema conformance). Any timeline that breaches an invariant suffers immediate **Quantum Decoherence** and is disqualified from reality.
@@ -48,126 +49,105 @@ When speculative futures complete, an Observation Strategy collapses the superpo
 - `CollapseStrategy.LOWEST_ENTROPY`: Chooses the timeline causing minimal system disruption.
 - `CollapseStrategy.MAX_METRIC(key)`: Multi-objective optimizer maximizing specific KPIs (e.g. trading alpha, accuracy, throughput).
 
-The winner's deltas are atomically merged into canonical root reality, competing timelines are dissolved, and a cryptographic fingerprint is anchored.
+### 4. Quantum Entanglement Across Realities
+Cross-cutting signals (such as cancellation beacons, distributed leases, or poison-pill notifications) can be registered as **Quantum Entangled** via `mv.entangle("abort_signal")`. When one timeline mutates an entangled key, the mutation teleports instantaneously to all sibling universes while non-entangled state remains 100% isolated.
 
-### 4. Time-Travel Counterfactual Causality Debugger
-Engineers can capture immutable checkpoints, rewind the universe, inject synthetic "What-If" faults (e.g., *What if upstream returned HTTP 504 at 02:14 AM?*), and compute automated state divergence diffs between actual history and counterfactual timelines.
-
-### 5. Quantum Entanglement Across Realities
-Certain cross-cutting signals (such as cancellation beacons, distributed leases, or poison-pill notifications) can be registered as **Quantum Entangled**. When one timeline mutates an entangled key, the mutation teleports instantaneously to all sibling universes while non-entangled state remains 100% isolated.
-
-### 6. Paradox & Concurrency Conflict Sentinel
+### 5. Paradox & Concurrency Conflict Sentinel
 Static and runtime analysis of active branches detecting write-write state collisions, type mutation drift (e.g. string vs int), and calculating symmetrical entropy drift across parallel realities.
+
+### 6. Time-Travel Counterfactual Causality Debugger
+Engineers can capture immutable checkpoints, rewind the universe, inject synthetic "What-If" faults, and compute automated state divergence diffs between actual history and counterfactual timelines.
 
 ### 7. Holographic Live Dashboard with Web Audio FX & Control Deck
 A zero-dependency HTTP + Server-Sent Events (SSE) visualizer with an animated HTML5 Canvas, live interactive control buttons (Spawn Universe, Inject Chaos, Paradox Scan), and pure oscillator-synthesized Web Audio effects.
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Quick Start with the `senku` CLI
 
-### 1. Run the Interactive Master Showcase
-```bash
-python run_demo.py
-```
-This runs four production scenarios:
-1. **Resilient Microservice RPC Gateway**: Survives upstream packet drops with 0ms user timeout penalty.
-2. **Quantitative Smart Order Router**: Safely collapses on maximum alpha while enforcing a \$950,000 capital solvency invariant.
-3. **Time-Travel Counterfactual Debugger**: Automatically pinpoints a subtle distributed pricing regression.
-4. **Quantum Entanglement & Fast-Cancel**: Teleports an abort signal across universes to terminate a compute loop early.
+The entire engine is accessible through the unified `senku.py` command:
 
-### 2. Launch the Cyberpunk Live Dashboard
-```bash
-python run_dashboard.py
-```
-Open your browser to `http://localhost:8080` to watch concurrent speculative timelines fork, mutate, decohere, and collapse live on an interactive HTML5 Canvas with live interactive chaos controls.
+```powershell
+cd D:\Subrat\quantumflow
 
-### 3. Run the Unit Test Suite
-```bash
-python -m unittest discover -s tests
+# 1. Launch the interactive Senku Quantum Labs Web Visualizer
+python senku.py web --port 8080
+
+# 2. Run the 4-scenario scientific showcase
+python senku.py demo
+
+# 3. Run the 18-test scientific verification protocol
+python senku.py test
+
+# 4. Check the Senku canonical state matrix and cryptographic hash
+python senku.py status
 ```
-*(18/18 tests passing across memory isolation, invariants, timelines, entanglement, paradox detection, and decorators).*
 
 ---
 
-## 💻 Code Example: Writing Superpositional Code
+## 💻 Developer Ergonomics: The `@superposition` Decorator
 
 ```python
 import asyncio
-from quantumflow import Multiverse, CollapseStrategy, Timeline
+from quantumflow import Multiverse, CollapseStrategy
 
-async def main():
-    # 1. Initialize the Multiverse
-    mv = Multiverse(name="ProdCosmos")
-    mv.set_root_state("balance", 1000.0)
+mv = Multiverse(name="SenkuLab")
 
-    # 2. Register universal invariants
-    mv.register_invariant(
-        "SolvencyInvariant",
-        lambda state: state.get("balance", 0) >= 0,
-        "Balance cannot drop below zero"
-    )
-
-    # 3. Define speculative futures
-    async def aggressive_fast_path(tl: Timeline):
+@mv.superposition(branches=["FastRoute", "HedgedReplica"], strategy=CollapseStrategy.FASTEST_VALID)
+async def execute_task(timeline, branch_name, payload):
+    if branch_name == "FastRoute":
         await asyncio.sleep(0.02)
-        # Attempt an aggressive deduction
-        tl.mutate("balance", -50.0)  # Violates invariant -> Decoheres!
-
-    async def conservative_path(tl: Timeline):
+        timeline.mutate("route", "Direct")
+        return f"Processed {payload} via FastRoute"
+    else:
         await asyncio.sleep(0.04)
-        tl.mutate("balance", 950.0)
-        tl.mutate("applied_fee", 50.0)
-        return "SUCCESS_FEE_APPLIED"
+        timeline.mutate("route", "Replica")
+        return f"Processed {payload} via HedgedReplica"
 
-    # 4. Run superposition & collapse wavefunction onto reality
-    winner, result = await mv.run_superposition(
-        tasks={
-            "Aggressive": aggressive_fast_path,
-            "Conservative": conservative_path
-        },
-        strategy=CollapseStrategy.FASTEST_VALID
-    )
-
-    print(f"Collapsed onto: {winner.name} (Result: {result})")
-    print(f"Root Balance: ${mv.get_root_state('balance')}")
-
-if __name__ == "__main__":
-    asyncio.run(main())
+# Automatically branches, executes concurrently, and commits winner to root reality!
+result = asyncio.run(execute_task("DATA_CHUNK_01"))
+print(result)
 ```
 
 ---
 
-## 📂 Repository Topology
+## 📂 Project Topology
 
 ```
-quantumflow/
+D:\Subrat\quantumflow/
+├── senku.py                  # Master Senku CLI application
+├── pyproject.toml            # Senku Technologies package metadata
+├── README.md                 # Complete Senku engineering documentation
 ├── quantumflow/
+│   ├── __init__.py           # Public API exports
 │   ├── core/
 │   │   ├── memory.py         # Copy-on-Write (CoW) Temporal Shadow Memory
 │   │   ├── invariants.py     # Invariant engine & Decoherence handlers
 │   │   ├── timeline.py       # Timeline entities, entropy & metrics
-│   │   └── multiverse.py     # Multiverse conductor & Wavefunction Collapse
+│   │   ├── multiverse.py     # Multiverse conductor & Wavefunction Collapse
+│   │   └── entanglement.py   # Cross-universe state teleportation
 │   ├── causality/
 │   │   ├── tracker.py        # Directed Acyclic Graph (DAG) causality logger
-│   │   └── time_travel.py    # Historical checkpoints & What-If counterfactuals
+│   │   ├── time_travel.py    # Historical checkpoints & What-If counterfactuals
+│   │   └── paradox.py        # Concurrency collision & type drift sentinel
 │   ├── server/
 │   │   ├── dashboard.py      # Standard library HTTP + SSE telemetry server
 │   │   └── static/
-│   │       ├── index.html    # Cyberpunk HUD visualizer interface
-│   │       ├── style.css     # Glassmorphism neon styling
-│   │       └── app.js        # HTML5 Canvas real-time branching animation
+│   │       ├── index.html    # Senku Quantum Labs HUD interface
+│   │       ├── style.css     # Senku emerald cyberpunk neon styling
+│   │       └── app.js        # HTML5 Canvas real-time branching animation & Audio FX
 │   └── demos/
 │       ├── demo_resilient_gateway.py
 │       ├── demo_algorithmic_router.py
-│       └── demo_counterfactual_debug.py
-├── tests/
-│   ├── test_memory.py        # Isolation & delta commit tests
-│   ├── test_timeline.py      # Invariant & decoherence tests
-│   └── test_multiverse.py    # Superposition & collapse strategy tests
-├── run_demo.py               # Interactive CLI terminal showcase
-├── run_dashboard.py          # Real-time web visualizer launcher
-└── pyproject.toml            # Packaging metadata
+│       ├── demo_counterfactual_debug.py
+│       └── demo_quantum_entanglement.py
+└── tests/
+    ├── test_memory.py        # CoW isolation & delta commit tests
+    ├── test_timeline.py      # Invariant & decoherence tests
+    ├── test_multiverse.py    # Superposition & collapse strategy tests
+    ├── test_entanglement.py  # Quantum state teleportation tests
+    ├── test_paradox.py       # Paradox Sentinel conflict detection tests
+    └── test_decorator.py     # @superposition decorator & context manager tests
 ```
 
 ---
@@ -177,3 +157,4 @@ quantumflow/
 - **Zero Third-Party Dependencies**: Pure Python 3.9+ standard library (`asyncio`, `copy`, `dataclasses`, `http.server`, `threading`, `hashlib`). Runs anywhere immediately with zero install friction.
 - **Deterministic Cryptographic Provenance**: Every state mutation generates a Merkle-compatible SHA-256 state fingerprint.
 - **Fail-Safe Decoherence**: Broken branches are isolated and pruned instantly; poisoned state can never pollute root reality.
+- **Ten Billion Percent Precision**: Every reality is mathematically verified against system invariants before collapse.

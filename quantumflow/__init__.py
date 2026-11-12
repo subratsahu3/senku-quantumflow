@@ -14,8 +14,9 @@ from quantumflow.causality.tracker import CausalityGraph
 from quantumflow.causality.time_travel import TimeTravelEngine, Checkpoint, CounterfactualResult
 from quantumflow.causality.paradox import ParadoxSentinel, ParadoxConflict, ConflictType
 
-__version__ = "1.1.0"
-__author__ = "Principal Software Engineer"
+__version__ = "1.2.0"
+__author__ = "Senku Technologies"
+__brand__ = "SENKU // QuantumFlow"
 
 __all__ = [
     "Multiverse",
