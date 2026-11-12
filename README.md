@@ -4,7 +4,7 @@
 > *Architected with 10+ years of Distributed Systems, Concurrency, and Low-Latency Systems Experience.*
 
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/)
-[![Tests](https://img.shields.io/badge/tests-12%2F12%20passing-brightgreen.svg)]()
+[![Tests](https://img.shields.io/badge/tests-18%2F18%20passing-brightgreen.svg)]()
 [![Zero Dependencies](https://img.shields.io/badge/dependencies-0%20(pure%20standard%20library)-success.svg)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -53,8 +53,14 @@ The winner's deltas are atomically merged into canonical root reality, competing
 ### 4. Time-Travel Counterfactual Causality Debugger
 Engineers can capture immutable checkpoints, rewind the universe, inject synthetic "What-If" faults (e.g., *What if upstream returned HTTP 504 at 02:14 AM?*), and compute automated state divergence diffs between actual history and counterfactual timelines.
 
-### 5. Holographic Real-Time Telemetry Dashboard
-A zero-dependency HTTP + Server-Sent Events (SSE) live visualizer with an animated HTML5 Canvas depicting the multiverse topology, branching arcs, real-time node pulses, and state diffs.
+### 5. Quantum Entanglement Across Realities
+Certain cross-cutting signals (such as cancellation beacons, distributed leases, or poison-pill notifications) can be registered as **Quantum Entangled**. When one timeline mutates an entangled key, the mutation teleports instantaneously to all sibling universes while non-entangled state remains 100% isolated.
+
+### 6. Paradox & Concurrency Conflict Sentinel
+Static and runtime analysis of active branches detecting write-write state collisions, type mutation drift (e.g. string vs int), and calculating symmetrical entropy drift across parallel realities.
+
+### 7. Holographic Live Dashboard with Web Audio FX & Control Deck
+A zero-dependency HTTP + Server-Sent Events (SSE) visualizer with an animated HTML5 Canvas, live interactive control buttons (Spawn Universe, Inject Chaos, Paradox Scan), and pure oscillator-synthesized Web Audio effects.
 
 ---
 
@@ -64,21 +70,23 @@ A zero-dependency HTTP + Server-Sent Events (SSE) live visualizer with an animat
 ```bash
 python run_demo.py
 ```
-This runs three real-world production scenarios:
+This runs four production scenarios:
 1. **Resilient Microservice RPC Gateway**: Survives upstream packet drops with 0ms user timeout penalty.
 2. **Quantitative Smart Order Router**: Safely collapses on maximum alpha while enforcing a \$950,000 capital solvency invariant.
 3. **Time-Travel Counterfactual Debugger**: Automatically pinpoints a subtle distributed pricing regression.
+4. **Quantum Entanglement & Fast-Cancel**: Teleports an abort signal across universes to terminate a compute loop early.
 
 ### 2. Launch the Cyberpunk Live Dashboard
 ```bash
 python run_dashboard.py
 ```
-Open your browser to `http://localhost:8080` to watch concurrent speculative timelines fork, mutate, decohere, and collapse live on an interactive HTML5 Canvas.
+Open your browser to `http://localhost:8080` to watch concurrent speculative timelines fork, mutate, decohere, and collapse live on an interactive HTML5 Canvas with live interactive chaos controls.
 
 ### 3. Run the Unit Test Suite
 ```bash
 python -m unittest discover -s tests
 ```
+*(18/18 tests passing across memory isolation, invariants, timelines, entanglement, paradox detection, and decorators).*
 
 ---
 

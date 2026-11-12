@@ -8,7 +8,10 @@ and commit the optimal reality.
 
 from __future__ import annotations
 import asyncio
+from contextlib import contextmanager
+import functools
 import inspect
+import random
 import threading
 import time
 from typing import Any, Callable, Coroutine, Dict, List, Optional, Union
@@ -16,6 +19,8 @@ from typing import Any, Callable, Coroutine, Dict, List, Optional, Union
 from quantumflow.core.memory import TemporalMemory
 from quantumflow.core.timeline import Timeline, TimelineStatus
 from quantumflow.core.invariants import InvariantRegistry, DecoherenceError
+from quantumflow.core.entanglement import EntanglementHub
+from quantumflow.causality.paradox import ParadoxSentinel, ParadoxConflict
 
 
 class NoValidTimelineError(Exception):
@@ -67,6 +72,7 @@ class Multiverse:
         self.name = name
         self.root_memory = TemporalMemory(parent=None, name="root_reality")
         self.global_invariants = InvariantRegistry()
+        self.entanglement_hub = EntanglementHub()
         self._timelines: Dict[str, Timeline] = {}
         self._lock = threading.RLock()
         self._subscribers: List[Callable[[Dict[str, Any]], None]] = []
@@ -102,6 +108,104 @@ class Multiverse:
         """Register a universal invariant that every timeline must respect."""
         self.global_invariants.register(name, predicate, error_msg)
 
+    def entangle(self, key: str) -> None:
+        """Mark a state variable as entangled across all speculative timelines."""
+        self.entanglement_hub.register_key(key)
+
+    def mutate_entangled(self, timeline: Timeline, key: str, value: Any) -> int:
+        """
+        Mutates key in local timeline and teleports it to all sibling timelines.
+        """
+        timeline.mutate(key, value)
+        synced_count = self.entanglement_hub.broadcast_mutation(timeline.id, key, value)
+        self._notify_subscribers({
+            "event": "QUANTUM_ENTANGLEMENT_SYNC",
+            "sourceTimeline": timeline.id,
+            "key": key,
+            "syncedBranches": synced_count,
+            "timestamp": time.time()
+        })
+        return synced_count
+
+    @contextmanager
+    def branch(self, name: str = "speculative_branch", auto_commit: bool = False):
+        """
+        Context manager for temporary speculative timeline execution.
+        If auto_commit is True and no exception is raised, commits to parent reality.
+        """
+        tl = self.fork(name=name)
+        try:
+            yield tl
+            if auto_commit:
+                tl.mark_collapsed()
+        except Exception as exc:
+            tl.mark_decoherent(str(exc))
+            raise
+        finally:
+            if tl.status == TimelineStatus.PENDING:
+                tl.mark_dissolved("context_exit")
+
+    def superposition(self, branches: List[str], strategy: Callable[[List[Timeline]], Timeline] = CollapseStrategy.FASTEST_VALID):
+        """
+        Function decorator for declarative multiverse execution.
+        Decorated async function must accept `(timeline, branch_name, *args, **kwargs)`.
+        """
+        def decorator(fn):
+            @functools.wraps(fn)
+            async def wrapper(*args, **kwargs):
+                tasks = {
+                    b_name: (lambda b: (lambda tl: fn(tl, b, *args, **kwargs)))(b_name)
+                    for b_name in branches
+                }
+                winner, result = await self.run_superposition(tasks=tasks, strategy=strategy)
+                return result
+            return wrapper
+        return decorator
+
+    def inspect_conflicts(self) -> List[Dict[str, Any]]:
+        """Run paradox and concurrency conflict sentinel across active timelines."""
+        conflicts = ParadoxSentinel.inspect(list(self._timelines.values()))
+        return [c.to_dict() for c in conflicts]
+
+    def inject_chaos(self, target: str = "random", chaos_type: str = "LATENCY_SPIKE") -> Optional[Dict[str, Any]]:
+        """
+        Inject synthetic entropy or faults into active superpositions.
+        Used for chaos engineering, resilience auditing, and live UI testing.
+        """
+        active = [t for t in self._timelines.values() if t.status == TimelineStatus.SUPERPOSED]
+        if not active:
+            return None
+
+        victim = random.choice(active) if target == "random" else self._timelines.get(target)
+        if not victim:
+            return None
+
+        if chaos_type == "LATENCY_SPIKE":
+            victim.latency_ms += random.uniform(150, 400)
+            victim.entropy += 0.5
+            victim.log_event("CHAOS_INJECTION", "Synthetic latency dilation storm applied")
+        elif chaos_type == "CORRUPTION":
+            victim.mutate("packet_checksum", "0xDEADBEEF")
+            victim.entropy += 0.8
+            victim.mark_decoherent("Cosmic ray bitflip / data corruption chaos injected")
+        elif chaos_type == "INVARIANT_BREACH":
+            victim.mutate("balance", -9999)
+            victim.mark_decoherent("Synthetic balance drain chaos injected")
+
+        report = {
+            "timelineId": victim.id,
+            "timelineName": victim.name,
+            "chaosType": chaos_type,
+            "newStatus": victim.status.value,
+            "entropy": round(victim.entropy, 2),
+            "timestamp": time.time()
+        }
+        self._notify_subscribers({
+            "event": "CHAOS_INJECTED",
+            "report": report
+        })
+        return report
+
     def fork(self, name: str, parent: Optional[Timeline] = None, metadata: Optional[Dict[str, Any]] = None) -> Timeline:
         """
         Fork a new speculative timeline from root reality or an existing timeline.
@@ -121,6 +225,7 @@ class Multiverse:
             for inv in self.global_invariants:
                 tl.invariants.register(inv.name, inv.predicate, inv.error_msg)
 
+            self.entanglement_hub.bind_timeline(tl)
             self._timelines[tl.id] = tl
             self._notify_subscribers({
                 "event": "TIMELINE_FORKED",
@@ -150,10 +255,9 @@ class Multiverse:
             # Validate invariants at start of timeline
             timeline.validate_invariants()
 
-            if inspect.iscoroutinefunction(task_fn):
-                res = await task_fn(timeline)
-            else:
-                res = task_fn(timeline)
+            res = task_fn(timeline)
+            if inspect.isawaitable(res):
+                res = await res
 
             timeline.result = res
             # Validate invariants at end of timeline

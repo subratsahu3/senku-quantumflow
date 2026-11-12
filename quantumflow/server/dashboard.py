@@ -77,11 +77,67 @@ class MultiverseHTTPHandler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         parsed = urlparse(self.path)
-        if parsed.path == "/api/action/simulate":
-            # Handled by demo loop or action dispatcher
-            self._serve_json({"status": "acknowledged", "timestamp": time.time()})
+        content_length = int(self.headers.get("Content-Length", 0))
+        body = {}
+        if content_length > 0:
+            raw_body = self.rfile.read(content_length)
+            try:
+                body = json.loads(raw_body.decode("utf-8"))
+            except Exception:
+                body = {}
+
+        if parsed.path == "/api/action/chaos":
+            chaos_type = body.get("type", "LATENCY_SPIKE")
+            report = self.multiverse.inject_chaos("random", chaos_type) if self.multiverse else None
+            self._serve_json({"status": "ok", "report": report})
+        elif parsed.path == "/api/action/spawn":
+            # Spawn interactive speculative race
+            if self.multiverse:
+                async def _interactive_race():
+                    import random
+                    req_id = random.randint(1000, 9999)
+                    tasks = {
+                        f"HyperSpeed-{req_id}": lambda tl: self._task_speed(tl),
+                        f"DeepVerify-{req_id}": lambda tl: self._task_verify(tl),
+                        f"ShadowCache-{req_id}": lambda tl: self._task_cache(tl),
+                    }
+                    from quantumflow import CollapseStrategy
+                    await self.multiverse.run_superposition(tasks, strategy=CollapseStrategy.FASTEST_VALID)
+
+                # Schedule in background thread
+                threading.Thread(target=lambda: asyncio.run(_interactive_race()), daemon=True).start()
+            self._serve_json({"status": "spawned", "timestamp": time.time()})
+        elif parsed.path == "/api/action/conflicts":
+            conflicts = self.multiverse.inspect_conflicts() if self.multiverse else []
+            self._serve_json({"conflicts": conflicts, "count": len(conflicts)})
         else:
             self.send_error(HTTPStatus.NOT_FOUND)
+
+    @staticmethod
+    async def _task_speed(tl):
+        import asyncio, random
+        await asyncio.sleep(random.uniform(0.03, 0.08))
+        if random.random() < 0.3:
+            raise RuntimeError("Jitter timeout on primary trunk")
+        tl.mutate("route", "HyperSpeed-Direct")
+        tl.metrics["alpha"] = 92
+        return "SUCCESS"
+
+    @staticmethod
+    async def _task_verify(tl):
+        import asyncio, random
+        await asyncio.sleep(random.uniform(0.05, 0.12))
+        tl.mutate("route", "DeepVerify-Mesh")
+        tl.metrics["alpha"] = 98
+        return "VERIFIED"
+
+    @staticmethod
+    async def _task_cache(tl):
+        import asyncio, random
+        await asyncio.sleep(random.uniform(0.08, 0.16))
+        tl.mutate("route", "ShadowCache-Local")
+        tl.metrics["alpha"] = 75
+        return "CACHED"
 
     def _serve_file(self, filename: str, content_type: str):
         filepath = os.path.join(self.static_dir, filename)

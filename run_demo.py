@@ -17,6 +17,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from quantumflow.demos.demo_resilient_gateway import run_resilient_gateway_demo
 from quantumflow.demos.demo_algorithmic_router import run_algorithmic_router_demo
 from quantumflow.demos.demo_counterfactual_debug import run_counterfactual_debug_demo
+from quantumflow.demos.demo_quantum_entanglement import run_entanglement_demo
 from quantumflow.causality.tracker import CausalityGraph
 
 
@@ -52,8 +53,11 @@ async def main():
     print("\nExecuting Test Scenario 2 of 3: Quantitative Order Router...")
     await run_algorithmic_router_demo()
 
-    print("\nExecuting Test Scenario 3 of 3: Time-Travel Counterfactual Engine...")
+    print("\nExecuting Test Scenario 3 of 4: Time-Travel Counterfactual Engine...")
     run_counterfactual_debug_demo()
+
+    print("\nExecuting Test Scenario 4 of 4: Quantum Entanglement & Fast-Cancel...")
+    await run_entanglement_demo()
 
     # Demonstrate Causality Graph ASCII Renderer
     print("\n" + "="*70)

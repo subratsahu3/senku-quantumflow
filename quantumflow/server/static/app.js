@@ -275,6 +275,7 @@
       state.timelines[data.timeline.id] = data.timeline;
       recalculateMetrics();
       appendLog("FORK", `Timeline '${data.timeline.name}' spawned`);
+      soundEngine.playFork();
       updateDOM();
     });
 
@@ -296,6 +297,7 @@
       }
       recalculateMetrics();
       appendLog("DECOHERENCE", data.reason);
+      soundEngine.playDecohere();
       updateDOM();
     });
 
@@ -307,6 +309,20 @@
       // Refresh state
       fetchInitialState();
       appendLog("COLLAPSE", `Reality converged onto '${data.winner.name}'!`);
+      soundEngine.playCollapse();
+    });
+
+    es.addEventListener("CHAOS_INJECTED", ev => {
+      const data = JSON.parse(ev.data);
+      appendLog("CHAOS_STORM", `${data.report.chaosType} hit ${data.report.timelineName}`);
+      soundEngine.playChaos();
+      fetchInitialState();
+    });
+
+    es.addEventListener("QUANTUM_ENTANGLEMENT_SYNC", ev => {
+      const data = JSON.parse(ev.data);
+      appendLog("ENTANGLEMENT", `Teleported '${data.key}' across ${data.syncedBranches} universes`);
+      fetchInitialState();
     });
 
     es.addEventListener("ROOT_STATE_UPDATE", ev => {
@@ -316,8 +332,110 @@
     });
   }
 
+  // --- Web Audio FX Synthesizer (Zero Dependencies) ---
+  const soundEngine = {
+    enabled: false,
+    ctx: null,
+    init() {
+      if (!this.ctx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        this.ctx = new AudioContext();
+      }
+      if (this.ctx.state === "suspended") {
+        this.ctx.resume();
+      }
+    },
+    playTone(freq, type, duration, gainLevel = 0.08) {
+      if (!this.enabled || !this.ctx) return;
+      try {
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+        gain.gain.setValueAtTime(gainLevel, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + duration);
+      } catch (e) {}
+    },
+    playFork() {
+      this.playTone(600, "sine", 0.15, 0.05);
+    },
+    playDecohere() {
+      this.playTone(180, "sawtooth", 0.25, 0.07);
+    },
+    playCollapse() {
+      if (!this.enabled || !this.ctx) return;
+      // Synthesize harmonious major chord
+      [440, 554, 659, 880].forEach((f, idx) => {
+        setTimeout(() => this.playTone(f, "sine", 0.35, 0.04), idx * 40);
+      });
+    },
+    playChaos() {
+      this.playTone(220, "triangle", 0.3, 0.09);
+    }
+  };
+
+  // --- Wire Interactive Control Deck ---
+  function setupControls() {
+    const btnSpawn = document.getElementById("btn-spawn");
+    const btnChaos = document.getElementById("btn-chaos");
+    const btnConflicts = document.getElementById("btn-conflicts");
+    const btnAudio = document.getElementById("btn-audio");
+
+    if (btnSpawn) {
+      btnSpawn.addEventListener("click", async () => {
+        btnSpawn.style.transform = "scale(0.95)";
+        setTimeout(() => btnSpawn.style.transform = "", 150);
+        await fetch("/api/action/spawn", { method: "POST" });
+      });
+    }
+
+    if (btnChaos) {
+      btnChaos.addEventListener("click", async () => {
+        btnChaos.style.transform = "scale(0.95)";
+        setTimeout(() => btnChaos.style.transform = "", 150);
+        await fetch("/api/action/chaos", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ type: "LATENCY_SPIKE" })
+        });
+      });
+    }
+
+    if (btnConflicts) {
+      btnConflicts.addEventListener("click", async () => {
+        const res = await fetch("/api/action/conflicts", { method: "POST" });
+        const data = await res.json();
+        if (data.count === 0) {
+          appendLog("PARADOX_SCAN", "Causality check passed: Zero race conditions or collisions.");
+        } else {
+          appendLog("PARADOX_ALERT", `Detected ${data.count} state conflicts!`);
+        }
+      });
+    }
+
+    if (btnAudio) {
+      btnAudio.addEventListener("click", () => {
+        soundEngine.init();
+        soundEngine.enabled = !soundEngine.enabled;
+        if (soundEngine.enabled) {
+          btnAudio.innerHTML = "<span>🔊</span> Sound ON";
+          btnAudio.classList.add("active");
+          soundEngine.playCollapse();
+        } else {
+          btnAudio.innerHTML = "<span>🔇</span> Sound FX";
+          btnAudio.classList.remove("active");
+        }
+      });
+    }
+  }
+
   // Start visualizer
   fetchInitialState();
   connectSSE();
+  setupControls();
   render();
 })();

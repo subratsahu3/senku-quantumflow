@@ -87,6 +87,78 @@ h1 {
   letter-spacing: 0.5px;
 }
 
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.control-deck {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn {
+  background: rgba(15, 23, 42, 0.8);
+  color: var(--text-main);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn-action {
+  border-color: rgba(0, 243, 255, 0.4);
+  color: var(--cyan);
+}
+.btn-action:hover {
+  background: rgba(0, 243, 255, 0.15);
+  box-shadow: 0 0 14px rgba(0, 243, 255, 0.3);
+}
+
+.btn-chaos {
+  border-color: rgba(255, 170, 0, 0.4);
+  color: var(--amber);
+}
+.btn-chaos:hover {
+  background: rgba(255, 170, 0, 0.15);
+  box-shadow: 0 0 14px rgba(255, 170, 0, 0.3);
+}
+
+.btn-audit {
+  border-color: rgba(181, 23, 158, 0.4);
+  color: #d05ce3;
+}
+.btn-audit:hover {
+  background: rgba(181, 23, 158, 0.15);
+  box-shadow: 0 0 14px rgba(181, 23, 158, 0.3);
+}
+
+.btn-audio.active {
+  border-color: rgba(0, 255, 157, 0.4);
+  color: var(--emerald);
+  background: rgba(0, 255, 157, 0.15);
+}
+
 .connection-status {
   display: flex;
   align-items: center;
