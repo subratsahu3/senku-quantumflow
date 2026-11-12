@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: senku-quantumflow
+    runtime: python
+    buildCommand: pip install -e .
+    startCommand: python senku.py web
+    plan: free
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0

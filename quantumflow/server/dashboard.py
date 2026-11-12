@@ -193,9 +193,10 @@ class MultiverseHTTPHandler(BaseHTTPRequestHandler):
 class DashboardServer:
     """Spins up background HTTP & SSE server."""
 
-    def __init__(self, multiverse: Multiverse, port: int = 8080):
+    def __init__(self, multiverse: Multiverse, port: int = 8080, host: str = "0.0.0.0"):
         self.multiverse = multiverse
         self.port = port
+        self.host = host
         self.broadcaster = SSEBroadcaster()
         self.static_dir = os.path.join(os.path.dirname(__file__), "static")
         self._server: Optional[HTTPServer] = None
@@ -213,10 +214,11 @@ class DashboardServer:
         handler.broadcaster = self.broadcaster
         handler.static_dir = self.static_dir
 
-        self._server = HTTPServer(("127.0.0.1", self.port), handler)
+        self._server = HTTPServer((self.host, self.port), handler)
         self._thread = threading.Thread(target=self._server.serve_forever, daemon=daemon)
         self._thread.start()
-        print(f"[*] QuantumFlow Multiverse Visualizer running on http://127.0.0.1:{self.port}")
+        display_host = "localhost" if self.host == "0.0.0.0" else self.host
+        print(f"[*] Senku QuantumFlow Visualizer running on http://{display_host}:{self.port} (bound to {self.host})")
 
     def stop(self):
         if self._server:

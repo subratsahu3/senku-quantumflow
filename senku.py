@@ -58,10 +58,24 @@ def cmd_demo(args):
     asyncio.run(run_master_demo())
 
 
+def get_local_ip():
+    """Attempt to detect local machine IP for LAN access."""
+    import socket
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        ip = s.getsockname()[0]
+        s.close()
+        return ip
+    except Exception:
+        return "127.0.0.1"
+
+
 def cmd_web(args):
     """Launches the interactive Senku Quantum Labs Web Visualizer."""
     print_senku_banner()
-    port = args.port or 8080
+    port = args.port or int(os.environ.get("PORT", 8080))
+    host = args.host or os.environ.get("HOST", "0.0.0.0")
     from quantumflow.server.dashboard import DashboardServer
 
     mv = Multiverse(name="SenkuQuantumLabs")
@@ -77,11 +91,15 @@ def cmd_web(args):
         "Entropy violation detected (decoherence triggered)"
     )
 
-    server = DashboardServer(multiverse=mv, port=port)
+    server = DashboardServer(multiverse=mv, port=port, host=host)
     server.start()
 
+    local_ip = get_local_ip()
     print(f"\n[🧪] Senku Quantum Labs Visualizer active!")
-    print(f"     URL:  http://localhost:{port}")
+    print(f"     • Local:        http://localhost:{port}")
+    if local_ip != "127.0.0.1":
+        print(f"     • LAN / Mobile: http://{local_ip}:{port}")
+    print(f"     • Cloud Host:   http://0.0.0.0:{port}")
     print(f"     Interactive Control Deck & Audio Synthesizer: READY")
     print(f"     Press Ctrl+C to terminate.\n")
 
@@ -145,7 +163,8 @@ def main():
 
     # web subcommand
     sub_web = subparsers.add_parser("web", help="Launch real-time HUD visualizer")
-    sub_web.add_argument("--port", type=int, default=8080, help="Port to bind (default: 8080)")
+    sub_web.add_argument("--port", type=int, default=None, help="Port to bind (default: 8080 or $PORT)")
+    sub_web.add_argument("--host", type=str, default=None, help="Host to bind (default: 0.0.0.0 or $HOST)")
     sub_web.set_defaults(func=cmd_web)
 
     # test subcommand
