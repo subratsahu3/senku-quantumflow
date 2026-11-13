@@ -13,7 +13,9 @@ import argparse
 import asyncio
 import os
 import sys
+import threading
 import time
+import webbrowser
 
 # Ensure UTF-8 output on Windows consoles without buffering delays
 if hasattr(sys.stdout, "reconfigure"):
