@@ -15,9 +15,12 @@ import os
 import sys
 import time
 
-# Ensure UTF-8 output on Windows consoles
+# Ensure UTF-8 output on Windows consoles without buffering delays
 if hasattr(sys.stdout, "reconfigure"):
-    sys.stdout.reconfigure(encoding="utf-8")
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", line_buffering=True, errors="replace")
+    except Exception:
+        pass
 
 # Ensure package is on sys.path
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -134,6 +137,16 @@ def cmd_web(args):
     server = DashboardServer(multiverse=mv, port=port, host=host)
     server.start()
 
+    # Automatically open default web browser so user immediately sees the visualizer!
+    import webbrowser
+    def _open_browser_auto():
+        time.sleep(1.0)
+        try:
+            webbrowser.open(f"http://localhost:{port}")
+        except Exception:
+            pass
+    threading.Thread(target=_open_browser_auto, daemon=True).start()
+
     tunnel_proc = None
     if getattr(args, "public", False):
         print("[*] Initializing instant public global tunnel...")
@@ -230,12 +243,12 @@ def main():
 
     if not args.command:
         print_senku_banner()
-        print("Usage: python senku.py [command]")
-        print("\nCommands:")
-        print("  web     Launch the interactive Senku Quantum Labs HUD at http://localhost:8080")
-        print("  demo    Run all 4 speculative resilience & causality scenarios")
-        print("  test    Execute the 18-test scientific verification suite")
-        print("  status  Display current Senku canonical state & cryptographic fingerprint\n")
+        print("[*] No subcommand specified — auto-launching Senku Quantum Labs Web HUD...")
+        class DefaultArgs:
+            port = 8080
+            host = "0.0.0.0"
+            public = False
+        cmd_web(DefaultArgs())
         return
 
     args.func(args)
