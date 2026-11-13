@@ -71,6 +71,46 @@ def get_local_ip():
         return "127.0.0.1"
 
 
+def start_public_tunnel(port: int):
+    """Launches an SSH tunnel using Windows OpenSSH to expose port to public internet."""
+    import subprocess, threading, re
+    cmd = [
+        "ssh",
+        "-o", "StrictHostKeyChecking=no",
+        "-o", "UserKnownHostsFile=NUL",
+        "-T",
+        "-R", f"80:localhost:{port}",
+        "nokey@localhost.run"
+    ]
+    try:
+        proc = subprocess.Popen(
+            cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            bufsize=1
+        )
+        def _monitor():
+            found_url = False
+            for line in proc.stdout:
+                match = re.search(r"https://[a-zA-Z0-9.\-_]+", line)
+                if match:
+                    url = match.group(0)
+                    if "admin.localhost.run" not in url and "docs" not in url:
+                        if not found_url:
+                            found_url = True
+                            print("\n" + "="*70)
+                            print("  [★] LIVE PUBLIC GLOBAL INTERNET URL (Accessible Worldwide!):")
+                            print(f"      👉  {url}")
+                            print("="*70 + "\n")
+        t = threading.Thread(target=_monitor, daemon=True)
+        t.start()
+        return proc
+    except Exception as e:
+        print(f"[-] Could not establish public tunnel: {e}")
+        return None
+
+
 def cmd_web(args):
     """Launches the interactive Senku Quantum Labs Web Visualizer."""
     print_senku_banner()
@@ -94,6 +134,11 @@ def cmd_web(args):
     server = DashboardServer(multiverse=mv, port=port, host=host)
     server.start()
 
+    tunnel_proc = None
+    if getattr(args, "public", False):
+        print("[*] Initializing instant public global tunnel...")
+        tunnel_proc = start_public_tunnel(port)
+
     local_ip = get_local_ip()
     print(f"\n[🧪] Senku Quantum Labs Visualizer active!")
     print(f"     • Local:        http://localhost:{port}")
@@ -111,6 +156,11 @@ def cmd_web(args):
     except KeyboardInterrupt:
         print("\n[*] Shutting down Senku Quantum Labs server...")
     finally:
+        if tunnel_proc:
+            try:
+                tunnel_proc.terminate()
+            except Exception:
+                pass
         server.stop()
 
 
@@ -165,6 +215,7 @@ def main():
     sub_web = subparsers.add_parser("web", help="Launch real-time HUD visualizer")
     sub_web.add_argument("--port", type=int, default=None, help="Port to bind (default: 8080 or $PORT)")
     sub_web.add_argument("--host", type=str, default=None, help="Host to bind (default: 0.0.0.0 or $HOST)")
+    sub_web.add_argument("--public", action="store_true", help="Launch instant public global internet tunnel")
     sub_web.set_defaults(func=cmd_web)
 
     # test subcommand

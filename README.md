@@ -73,15 +73,30 @@ cd D:\Subrat\quantumflow
 # 1. Launch the interactive Senku Quantum Labs Web Visualizer
 python senku.py web --port 8080
 
-# 2. Run the 4-scenario scientific showcase
+# 2. Launch with INSTANT PUBLIC WORLDWIDE INTERNET ACCESS:
+python senku.py web --public
+
+# 3. Run the 4-scenario scientific showcase
 python senku.py demo
 
-# 3. Run the 18-test scientific verification protocol
+# 4. Run the 18-test scientific verification protocol
 python senku.py test
 
-# 4. Check the Senku canonical state matrix and cryptographic hash
+# 5. Check the Senku canonical state matrix and cryptographic hash
 python senku.py status
 ```
+
+---
+
+## 🌐 Public 24/7 Web Availability
+
+1. **Instant Global Public Tunnel**:
+   Run `python senku.py web --public` to generate an instant live HTTPS address accessible anywhere in the world.
+2. **GitHub Pages (24/7 Permanent)**:
+   Once pushed to GitHub, your project is live at:
+   `https://subrat-sahu444.github.io/senku-quantumflow/`
+3. **Cloud Web Service (Render / Railway)**:
+   One-click deploy via `render.yaml` or `Dockerfile`.
 
 ---
 
