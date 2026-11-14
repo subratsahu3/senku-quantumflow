@@ -33,3 +33,9 @@ ENV/
 .vscode/
 *.swp
 *.swo
+
+# Senku Modernization Invariants
+.pytest_cache/
+.venv/
+.DS_Store
+Thumbs.db
